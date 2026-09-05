@@ -206,7 +206,6 @@ st.divider()
 # -------------------------------------------------------------------
 st.subheader("7. 제작 국가 및 장르별 영화 편수 (선버스트 그래프)")
 
-# 선버스트 그래프 생성 (계층 구조: 제작 국가 -> 장르)
 fig7 = px.sunburst(
     df,
     path=['nation', 'genre'],
@@ -214,7 +213,6 @@ fig7 = px.sunburst(
     color='nation'
 )
 
-# 호버 툴팁 및 라벨 서식 설정 (영화 편수 및 비율 표시)
 fig7.update_traces(
     hovertemplate="<b>구분:</b> %{label}<br><b>영화 편수:</b> %{value}편<br><b>상위 계층 대비 비율:</b> %{percentParent:.1%}"
 )
@@ -222,5 +220,34 @@ fig7.update_traces(
 st.plotly_chart(fig7, use_container_width=True)
 
 st.markdown("> **💡 이 그래프로 알 수 있는 것:** 제작 국가별 전체 개봉 영화 편수의 비중과, 각 국가 내에서 주로 어떤 장르의 영화가 수입/제작되어 개봉했는지 계층적 구조로 한눈에 파악할 수 있습니다.")
+
+st.divider()
+
+# -------------------------------------------------------------------
+# 여덟 번째 그래프: 개봉 첫 주 관객 수 vs 10위권 머문 날수 (산점도)
+# -------------------------------------------------------------------
+st.subheader("8. 개봉 첫 주 관객이 많았던 영화가 10위권에도 더 오래 버틸까?")
+
+fig8 = px.scatter(
+    df,
+    x='first_week_audi',
+    y='days_in_top10',
+    color='genre',
+    hover_name='movieNm',
+    title="개봉 첫 주 관객이 많았던 영화가 10위권에도 더 오래 버틸까?",
+    labels={
+        'first_week_audi': '개봉 첫 주 관객 수(명)',
+        'days_in_top10': '10위권 머문 날수(일)',
+        'genre': '장르'
+    }
+)
+
+fig8.update_traces(
+    hovertemplate="<b>영화명:</b> %{hovertext}<br><b>첫 주 관객 수:</b> %{x:,}명<br><b>10위권 머문 날수:</b> %{y}일"
+)
+
+st.plotly_chart(fig8, use_container_width=True)
+
+st.markdown("> **💡 이 그래프로 알 수 있는 것:** 초반 관객 동원력(첫 주 관객 수)이 뛰어난 영화가 상위권 체류 기간(10위권 머문 날수)도 긴 경향이 있는지, 아니면 첫 주 성적은 상대적으로 약했지만 입소문으로 오랜 기간 롱런한 작품이 있는지 확인할 수 있습니다.")
 
 st.divider()
